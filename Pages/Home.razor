@@ -8,68 +8,79 @@
 <div class="jwt-decoder-container">
     <div class="header-section">
         <h1>JWT Decoder</h1>
-        <p class="subtitle">Decode JSON Web Tokens client-side with no server calls</p>
     </div>
 
-    <div class="input-section">
-        <h3>Input JWT Token</h3>
-        <textarea 
-            class="jwt-input" 
-            placeholder="Paste your JWT token here..."
-            @bind="jwtInput"
-            @oninput="OnInputChanged"
-            rows="6"></textarea>
-        <button class="btn-decode" @onclick="DecodeToken">Decode JWT</button>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="input-section">
+                <h3>JSON Web Token (JWT)</h3>
+                <textarea 
+                    class="jwt-input" 
+                    placeholder="Paste your JWT token here..."
+                    @bind="jwtInput"
+                    @oninput="OnInputChanged"
+                    rows="20"></textarea>
+                <button class="btn-decode" @onclick="DecodeToken">Decode JWT</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            @if (result != null)
+            {
+                @if (result.Success)
+                {
+                    <div class="output-section">
+                        <div class="output-panel">
+                            <div class="panel-header">
+                                <h3>Header</h3>
+                                <button class="btn-copy" @onclick="() => CopyToClipboard(result.Header!)">
+                                    📋 Copy
+                                </button>
+                            </div>
+                            <pre class="json-output">@result.Header</pre>
+                        </div>
+
+                        <div class="output-panel">
+                            <div class="panel-header">
+                                <h3>Payload</h3>
+                                <button class="btn-copy" @onclick="() => CopyToClipboard(result.Payload!)">
+                                    📋 Copy
+                                </button>
+                            </div>
+                            <pre class="json-output">@result.Payload</pre>
+                        </div>
+
+                        <div class="output-panel">
+                            <div class="panel-header">
+                                <h3>Signature</h3>
+                                <button class="btn-copy" @onclick="() => CopyToClipboard(result.Signature!)">
+                                    📋 Copy
+                                </button>
+                            </div>
+                            <pre class="signature-output">@result.Signature</pre>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="error-section">
+                        <h3>⚠️ Error</h3>
+                        <p class="error-message">@result.ErrorMessage</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="placeholder-section">
+                    <p>Enter a JWT token on the left to see the decoded Header, Payload, and Signature here.</p>
+                </div>
+            }
+        </div>
     </div>
 
-    @if (result != null)
-    {
-        @if (result.Success)
-        {
-            <div class="output-section">
-                <div class="output-panel">
-                    <div class="panel-header">
-                        <h3>Header</h3>
-                        <button class="btn-copy" @onclick="() => CopyToClipboard(result.Header!)">
-                            📋 Copy
-                        </button>
-                    </div>
-                    <pre class="json-output">@result.Header</pre>
-                </div>
-
-                <div class="output-panel">
-                    <div class="panel-header">
-                        <h3>Payload</h3>
-                        <button class="btn-copy" @onclick="() => CopyToClipboard(result.Payload!)">
-                            📋 Copy
-                        </button>
-                    </div>
-                    <pre class="json-output">@result.Payload</pre>
-                </div>
-
-                <div class="output-panel">
-                    <div class="panel-header">
-                        <h3>Signature</h3>
-                        <button class="btn-copy" @onclick="() => CopyToClipboard(result.Signature!)">
-                            📋 Copy
-                        </button>
-                    </div>
-                    <pre class="signature-output">@result.Signature</pre>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="error-section">
-                <h3>⚠️ Error</h3>
-                <p class="error-message">@result.ErrorMessage</p>
-            </div>
-        }
-    }
-
-    <div class="footer-section">
+    @* <div class="footer-section">
         <p>All decoding happens client-side. No data is sent to any server.</p>
-    </div>
+    </div> *@
 </div>
 
 @code {
